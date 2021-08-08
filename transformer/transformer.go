@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"
+	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/model"
 )
 
 // TransformToMarkdown transform alertmanager notification to dingtalk markdow message

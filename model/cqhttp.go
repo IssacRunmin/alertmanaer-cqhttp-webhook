@@ -1,6 +1,6 @@
 package model
 
-type DingTalkMessage struct {
+type CQMessage struct {
 }
 
 type At struct {

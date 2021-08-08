@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"
-	"github.com/yunlzheng/alertmanaer-dingtalk-webhook/transformer"
+	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/model"
+	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/transformer"
 )
 
 // Send send markdown message to dingtalk

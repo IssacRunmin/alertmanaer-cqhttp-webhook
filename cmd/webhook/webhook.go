@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	model "github.com/yunlzheng/alertmanaer-dingtalk-webhook/model"
-	"github.com/yunlzheng/alertmanaer-dingtalk-webhook/notifier"
+	model "github.com/IssacRunmin/alertmanaer-cqhttp-webhook/model"
+	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/notifier"
 )
 
 var (
