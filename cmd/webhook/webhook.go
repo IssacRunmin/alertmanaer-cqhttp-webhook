@@ -16,7 +16,7 @@ var (
 
 func init() {
 	flag.BoolVar(&h, "h", false, "help")
-	flag.StringVar(&defaultRobot, "defaultRobot", "", "global dingtalk robot webhook, you can overwrite by alert rule with annotations dingtalkRobot")
+	flag.StringVar(&defaultRobot, "defaultRobot", "", "global cqhttp robot webhook, you can overwrite by alert rule with annotations cqRobot")
 }
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 
 		}
 
-		c.JSON(http.StatusOK, gin.H{"message": "send to dingtalk successful!"})
+		c.JSON(http.StatusOK, gin.H{"message": "send to cqhttp successful!"})
 
 	})
 	router.Run()

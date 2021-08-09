@@ -7,14 +7,14 @@ import (
 	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/model"
 )
 
-// TransformToMarkdown transform alertmanager notification to dingtalk markdow message
-func TransformToMarkdown(notification model.Notification) (markdown *model.DingTalkMarkdown, robotURL string, err error) {
+// TransformToMarkdown transform alertmanager notification to cqhttp message
+func TransformToCQmessage(notification model.Notification) (message *model.CQMessage, robotURL string, err error) {
 
 	groupKey := notification.GroupKey
 	status := notification.Status
 
 	annotations := notification.CommonAnnotations
-	robotURL = annotations["dingtalkRobot"]
+	robotURL = annotations["cqRobot"]
 
 	var buffer bytes.Buffer
 
@@ -28,16 +28,21 @@ func TransformToMarkdown(notification model.Notification) (markdown *model.DingT
 		buffer.WriteString(fmt.Sprintf("\n> 开始时间：%s\n", alert.StartsAt.Format("15:04:05")))
 	}
 
-	markdown = &model.DingTalkMarkdown{
-		MsgType: "markdown",
-		Markdown: &model.Markdown{
-			Title: fmt.Sprintf("通知组：%s(当前状态:%s)", groupKey, status),
-			Text:  buffer.String(),
-		},
-		At: &model.At{
-			IsAtAll: false,
-		},
+	message = &model.CQMessage{
+		MsgType: "cqhttp",
+		Message: buffer.String(),
 	}
+
+	//markdown = &model.DingTalkMarkdown{
+	//	MsgType: "markdown",
+	//	Markdown: &model.Markdown{
+	//		Title: fmt.Sprintf("通知组：%s(当前状态:%s)", groupKey, status),
+	//		Text:  buffer.String(),
+	//	},
+	//	At: &model.At{
+	//		IsAtAll: false,
+	//	},
+	//}
 
 	return
 }

@@ -10,10 +10,10 @@ import (
 	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/transformer"
 )
 
-// Send send markdown message to dingtalk
+// Send send markdown message to cqhttp
 func Send(notification model.Notification, defaultRobot string) (err error) {
 
-	markdown, robotURL, err := transformer.TransformToMarkdown(notification)
+	markdown, robotURL, err := transformer.TransformToCQmessage(notification)
 
 	if err != nil {
 		return
@@ -24,25 +24,25 @@ func Send(notification model.Notification, defaultRobot string) (err error) {
 		return
 	}
 
-	var dingTalkRobotURL string
+	var cqRobotURL string
 
 	if robotURL != "" {
-		dingTalkRobotURL = robotURL
+		cqRobotURL = robotURL
 	} else {
-		dingTalkRobotURL = defaultRobot
+		cqRobotURL = defaultRobot
 	}
 
-	if len(dingTalkRobotURL) == 0 {
+	if len(cqRobotURL) == 0 {
 		return nil
 	}
 
 	req, err := http.NewRequest(
 		"POST",
-		dingTalkRobotURL,
+		cqRobotURL,
 		bytes.NewBuffer(data))
 
 	if err != nil {
-		fmt.Println("dingtalk robot url not found ignore:")
+		fmt.Println("cqhttp robot url not found ignore:")
 		return
 	}
 
