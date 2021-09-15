@@ -3,6 +3,9 @@ package transformer
 import (
 	"bytes"
 	"fmt"
+	"strings"
+	"time"
+
 
 	"github.com/IssacRunmin/alertmanaer-cqhttp-webhook/model"
 )
@@ -17,16 +20,34 @@ func TransformToCQmessage(notification model.Notification) (message *model.CQMes
 	robotURL = annotations["cqRobot"]
 
 	var buffer bytes.Buffer
-
-	buffer.WriteString(fmt.Sprintf("### 通知组%s(当前状态:%s) \n", groupKey, status))
-
-	buffer.WriteString(fmt.Sprintf("#### 告警项:\n"))
-
-	for _, alert := range notification.Alerts {
+	var info string
+	chinaLocal, _ := time.LoadLocation("PRC")
+	for i, alert := range notification.Alerts {
 		annotations := alert.Annotations
-		buffer.WriteString(fmt.Sprintf("##### %s\n > %s\n", annotations["summary"], annotations["description"]))
-		buffer.WriteString(fmt.Sprintf("\n> 开始时间：%s\n", alert.StartsAt.Format("15:04:05")))
+		summary_slices = strings.Split(annotations["summary"], " ")
+		time0 := alert.StartsAt
+		if summary_slices[1] == "down" {
+			if status == "firing" {
+				info = "DOWN"
+			} else{
+				info = "UP"
+				time0 := alert.EndsAt
+			}
+		} else {
+			info = annotations["summary"]
+		}
+		buffer.WriteString(fmt.Sprintf("【%s】 %s since %s\n", summary_slices[0], info, time0.in(chinaLocal).Format("15:04:05")))
 	}
+
+	// buffer.WriteString(fmt.Sprintf("### 通知组%s(当前状态:%s) \n", groupKey, status))
+	//
+	// buffer.WriteString(fmt.Sprintf("#### 告警项:\n"))
+	//
+	// for _, alert := range notification.Alerts {
+	// 	annotations := alert.Annotations
+	// 	buffer.WriteString(fmt.Sprintf("##### %s\n > %s\n", annotations["summary"], annotations["description"]))
+	// 	buffer.WriteString(fmt.Sprintf("\n> 开始时间：%s\n", alert.StartsAt.Format("15:04:05")))
+	// }
 
 	message = &model.CQMessage{
 		MsgType: "cqhttp",
