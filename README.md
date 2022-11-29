@@ -3,15 +3,11 @@
 Webhook service support send Prometheus 2.0 alert message to Dingtalk.
 
 ## How To Use
-
+Assume cqhttp working on localhost at port 5600, start this webhook on 5602
 ```
 cd cmd/webhook
 go build
-webhook -defaultRobot=https://oapi.dingtalk.com/robot/send?access_token=xxxx
-```
-
-```
-go run webhook.go -defaultRobot=https://oapi.dingtalk.com/robot/send?access_token=xxxx
+go run webhook.go -defaultRobot="http://127.0.0.1:5600/send_private_msg?access_token=xxxx&user_id=xxx" -port=5602
 ```
 
 * -defaultRobot: default dingtalk webhook url, all notifaction from alertmanager will direct to this webhook address.
@@ -30,5 +26,5 @@ groups:
     annotations:
       summary: "Instance {{ $labels.instance }} CPU usgae high"
       description: "{{ $labels.instance }} CPU usage above 85% (current value: {{ $value }})"
-      dingtalkRobot: "https://oapi.dingtalk.com/robot/send?access_token=xxxx"
+      cqRobot="http://127.0.0.1:5602/send_group_msg?access_token=xxxx&group_id=xxxaccess_token=xxxx&group_id=xxx"
 ```

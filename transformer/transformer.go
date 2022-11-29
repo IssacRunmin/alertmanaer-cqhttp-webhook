@@ -13,7 +13,7 @@ import (
 // TransformToMarkdown transform alertmanager notification to cqhttp message
 func TransformToCQmessage(notification model.Notification) (message *model.CQMessage, robotURL string, err error) {
 
-	groupKey := notification.GroupKey
+	// groupKey := notification.GroupKey
 	status := notification.Status
 
 	annotations := notification.CommonAnnotations
@@ -21,22 +21,24 @@ func TransformToCQmessage(notification model.Notification) (message *model.CQMes
 
 	var buffer bytes.Buffer
 	var info string
+  var time0 time.Time
 	chinaLocal, _ := time.LoadLocation("PRC")
-	for i, alert := range notification.Alerts {
+	for _, alert := range notification.Alerts {
 		annotations := alert.Annotations
-		summary_slices = strings.Split(annotations["summary"], " ")
-		time0 := alert.StartsAt
+		summary_slices := strings.Split(annotations["summary"], " ")
+		time0 = alert.StartsAt
 		if summary_slices[1] == "down" {
 			if status == "firing" {
 				info = "DOWN"
 			} else{
 				info = "UP"
-				time0 := alert.EndsAt
+				time0 = alert.EndsAt
 			}
 		} else {
 			info = annotations["summary"]
 		}
-		buffer.WriteString(fmt.Sprintf("【%s】 %s since %s\n", summary_slices[0], info, time0.in(chinaLocal).Format("15:04:05")))
+		buffer.WriteString(fmt.Sprintf("【%s】 %s since %s\n", summary_slices[0],
+    info, time0.In(chinaLocal).Format("2006-01-02 15:04:05")))
 	}
 
 	// buffer.WriteString(fmt.Sprintf("### 通知组%s(当前状态:%s) \n", groupKey, status))
